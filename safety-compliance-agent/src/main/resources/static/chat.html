@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Assistant - HazardAI Agent</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ===== Navbar ===== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 40px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+}
+
+.navbar .logo {
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--purple), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    flex-shrink: 0;
+}
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+    gap: 28px;
+    flex: 1;
+    justify-content: center;
+    margin: 0 20px;
+}
+
+.navbar a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+    white-space: nowrap;
+}
+
+.navbar a:hover,
+.navbar a.active {
+    color: var(--cyan);
+}
+
+.navbar .btn-secondary {
+    flex-shrink: 0;
+}
+        .chat-window {
+            height: 380px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 10px;
+        }
+        .message {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            color: white;
+        }
+        .message.ai {
+            align-self: flex-start;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+        }
+        .sources {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+        .chat-input-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .chat-input-row input {
+            flex: 1;
+            margin: 0;
+        }
+        .loading {
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 13px;
+        }
+        .quick-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .quick-btn {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--cyan);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .quick-btn:hover {
+            border-color: var(--cyan);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🛡️ HazardAI Agent</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="documents.html">Documents</a></li>
+            <li><a href="chat.html" class="active">Chat Assistant</a></li>
+            <li><a href="incident.html">Report Incident</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+        </ul>
+        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2>💬 Ask a Safety Question</h2>
+
+            <label>Common Questions</label>
+<select id="quickQuestionSelect" onchange="askQuick(this.value)">
+    <option value="">-- Select a common question --</option>
+    <option value="What safety gear (PPE) is required?">🦺 What safety gear (PPE) is required?</option>
+    <option value="What should I do in case of fire?">🔥 What should I do in case of fire?</option>
+    <option value="What are the machine operation safety rules?">⚙️ Machine operation safety rules?</option>
+    <option value="How do I report a hazard?">⚠️ How do I report a hazard?</option>
+</select>
+            <div class="chat-window" id="chatWindow">
+                <div class="message ai">Hi! Ask me anything about your company's safety procedures.</div>
+            </div>
+            <div class="chat-input-row">
+                <input type="text" id="questionInput" placeholder="Type your question here...">
+                <button class="btn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+   </div>
+    <div class="footer-bottom">
+        <p>© 2026 HazardAI. A student project for manufacturing safety compliance.</p>
+    </div>
+</footer>
+    <script src="js/api.js"></script>
+    <script>
+        checkLoginOrRedirect();
+    </script>
+</body>
+</html>

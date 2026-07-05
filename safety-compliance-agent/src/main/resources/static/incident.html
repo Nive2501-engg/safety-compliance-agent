@@ -1,0 +1,349 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report Incident - Safety Compliance Agent</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            flex-shrink: 0;
+        }
+        .navbar ul {
+            display: flex;
+            list-style: none;
+            gap: 28px;
+            flex: 1;
+            justify-content: center;
+            margin: 0 20px;
+        }
+        .navbar a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .navbar a:hover, .navbar a.active { color: var(--cyan); }
+        .navbar .btn-secondary { flex-shrink: 0; }
+
+        .textarea-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .voice-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .mic-btn {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--cyan);
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .mic-btn.listening {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        .lang-select {
+            font-size: 12px;
+            padding: 4px 6px;
+            margin: 0;
+        }
+        .ppe-list {
+            margin-top: 10px;
+            padding: 12px;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .ppe-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6px 0;
+            font-size: 14px;
+        }
+        .result-box {
+            margin-top: 20px;
+            display: none;
+        }
+        .warning-text {
+            color: var(--warning);
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🛡️ Safety Compliance Agent</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="documents.html">Documents</a></li>
+            <li><a href="chat.html">Chat Assistant</a></li>
+            <li><a href="incident.html" class="active">Report Incident</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+        </ul>
+        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2>📝 Report an Incident</h2>
+
+            <label>Machine / Equipment</label>
+            <select id="machineSelect" onchange="loadPPEChecklist()">
+                <option value="">-- Select Machine --</option>
+            </select>
+
+            <div class="ppe-list" id="ppeList" style="display:none;">
+                <strong>Required Safety Gear:</strong>
+                <div id="ppeItems"></div>
+            </div>
+
+            <label>Incident Description</label>
+            <div class="textarea-row">
+                <textarea id="incidentDesc" rows="4" placeholder="Describe what happened..."></textarea>
+                <div class="voice-controls">
+                    <select id="voiceLang" class="lang-select">
+                        <option value="ta-IN">தமிழ்</option>
+                        <option value="en-IN">English</option>
+                    </select>
+                    <button class="mic-btn" id="micBtn" onclick="startVoiceInput()" title="Speak instead of typing">🎤</button>
+                </div>
+            </div>
+
+            <label>Your Name</label>
+            <input type="text" id="reporterName" placeholder="Enter your name">
+
+            <div class="warning-text" id="ppeWarning">⚠️ Please confirm all required safety gear before submitting.</div>
+
+            <button class="btn" style="margin-top:16px;" onclick="submitIncident()">Submit Incident</button>
+
+            <div class="result-box card" id="resultBox">
+                <h2>AI Classification Result</h2>
+                <p><strong>Severity:</strong> <span id="resultSeverity"></span></p>
+                <p><strong>Category:</strong> <span id="resultCategory"></span></p>
+                <p><strong>Recommended Action:</strong> <span id="resultAction"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>Safety Compliance Agent — Built with Spring Boot, Gemini AI & MySQL</footer>
+
+    <script src="js/api.js"></script>
+    <script>
+        checkLoginOrRedirect();
+        document.getElementById("reporterName").value = sessionStorage.getItem("userName") || "";
+    </script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report Incident - HazardAI Agentt</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            flex-shrink: 0;
+        }
+        .navbar ul {
+            display: flex;
+            list-style: none;
+            gap: 28px;
+            flex: 1;
+            justify-content: center;
+            margin: 0 20px;
+        }
+        .navbar a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .navbar a:hover, .navbar a.active { color: var(--cyan); }
+        .navbar .btn-secondary { flex-shrink: 0; }
+
+        .textarea-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .voice-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .mic-btn {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--cyan);
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .mic-btn.listening {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        .lang-select {
+            font-size: 12px;
+            padding: 4px 6px;
+            margin: 0;
+        }
+        .ppe-list {
+            margin-top: 10px;
+            padding: 12px;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .ppe-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6px 0;
+            font-size: 14px;
+        }
+        /* Override global label styles (display:block/width:100%) so
+           checkbox + label sit side by side instead of splitting apart */
+        .ppe-item label {
+            display: inline-flex !important;
+            align-items: center;
+            width: auto !important;
+            margin: 0 !important;
+            text-align: left !important;
+            flex: 0 0 auto;
+        }
+        .ppe-item input[type="checkbox"] {
+            width: auto;
+            flex: 0 0 auto;
+            margin: 0;
+        }
+        .result-box {
+            margin-top: 20px;
+            display: none;
+        }
+        .warning-text {
+            color: var(--warning);
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🛡️ HazardAI Agent</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="documents.html">Documents</a></li>
+            <li><a href="chat.html">Chat Assistant</a></li>
+            <li><a href="incident.html" class="active">Report Incident</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+        </ul>
+        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2> Report an Incident</h2>
+
+            <label>Machine / Equipment</label>
+            <select id="machineSelect">
+                <option value="">-- Select Machine --</option>
+            </select>
+
+            <div class="ppe-list" id="ppeList" style="display:none;">
+                <strong>Required Safety Gear:</strong>
+                <div id="ppeItems"></div>
+            </div>
+
+            <label>Incident Description</label>
+            <div class="textarea-row">
+                <textarea id="incidentDesc" rows="4" placeholder="Describe what happened..."></textarea>
+                <div class="voice-controls">
+                    <select id="voiceLang" class="lang-select">
+                        <option value="ta-IN">தமிழ்</option>
+                        <option value="en-IN">English</option>
+                    </select>
+                    <button class="mic-btn" id="micBtn" onclick="startVoiceInput()" title="Speak instead of typing">🎤</button>
+                </div>
+            </div>
+
+            <label>Your Name</label>
+            <input type="text" id="reporterName" placeholder="Enter your name">
+
+            <div class="warning-text" id="ppeWarning">⚠️ Please confirm all required safety gear before submitting.</div>
+
+            <button class="btn" style="margin-top:16px;" onclick="submitIncident()">Submit Incident</button>
+
+            <div class="result-box card" id="resultBox">
+                <h2>AI Classification Result</h2>
+                <p><strong>Severity:</strong> <span id="resultSeverity"></span></p>
+                <p><strong>Category:</strong> <span id="resultCategory"></span></p>
+                <p><strong>Recommended Action:</strong> <span id="resultAction"></span></p>
+            </div>
+        </div>
+    </div>
+
+  </div>
+    <div class="footer-bottom">
+        <p>© 2026 HazardAI. A student project for manufacturing safety compliance.</p>
+    </div>
+</footer>
+    <script src="js/api.js"></script>
+    <script>
+        checkLoginOrRedirect();
+        document.getElementById("reporterName").value = sessionStorage.getItem("userName") || "";
+    </script>
+</body>
+</html>

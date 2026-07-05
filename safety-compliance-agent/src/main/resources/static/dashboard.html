@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - HazardAI Agent</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            flex-shrink: 0;
+        }
+        .navbar ul {
+            display: flex;
+            list-style: none;
+            gap: 28px;
+            flex: 1;
+            justify-content: center;
+            margin: 0 20px;
+        }
+        .navbar a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .navbar a:hover, .navbar a.active { color: var(--cyan); }
+        .navbar .btn-secondary { flex-shrink: 0; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+        th {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .alert-section {
+            margin-bottom: 24px;
+            padding: 16px;
+        }
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+        .alert-item:last-child { border-bottom: none; }
+        .alert-desc { flex: 1; color: var(--text-muted); }
+        .alert-machine, .alert-reporter { font-size: 12px; color: var(--text-muted); }
+        .no-alerts {
+            color: var(--success, #22c55e);
+            font-size: 14px;
+            padding: 8px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🛡️ HazardAI Agent</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="documents.html">Documents</a></li>
+            <li><a href="chat.html">Chat Assistant</a></li>
+            <li><a href="incident.html">Report Incident</a></li>
+            <li><a href="dashboard.html" class="active">Dashboard</a></li>
+        </ul>
+        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+    </nav>
+
+    <div class="container">
+
+        <div class="stats-grid">
+            <div class="card stat-card">
+                <div class="stat-number" id="totalIncidents">-</div>
+                <div class="stat-label">Total Incidents</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-number" id="highSeverityCount">-</div>
+                <div class="stat-label">High Severity</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-number" id="totalMachines">-</div>
+                <div class="stat-label">Machines Tracked</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-number" id="totalDocuments">-</div>
+                <div class="stat-label">Documents Indexed</div>
+            </div>
+        </div>
+
+        <div class="card alert-section">
+            <h2>🔴 Active High-Severity Incidents</h2>
+            <div id="highSeverityAlerts"></div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="card">
+                <h2>Incidents by Severity</h2>
+                <canvas id="severityChart"></canvas>
+            </div>
+            <div class="card">
+                <h2>Incidents by Category</h2>
+                <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="card">
+                <h2>⚠️ Top Risky Machines</h2>
+                <canvas id="machineRiskChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+            <h2>Recent Incidents</h2>
+            <table>
+                <thead>
+    <tr>
+        <th>Description</th>
+        <th>Severity</th>
+        <th>Category</th>
+        <th>Reporter</th>
+        <th>Action</th>
+    </tr>
+</thead>
+                <tbody id="incidentTableBody"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+  </div>
+    <div class="footer-bottom">
+        <p>© 2026 HazardAI. A student project for manufacturing safety compliance.</p>
+    </div>
+</footer>
+    <script src="js/api.js"></script>
+    <script>
+        checkLoginOrRedirect();
+    </script>
+</body>
+</html>

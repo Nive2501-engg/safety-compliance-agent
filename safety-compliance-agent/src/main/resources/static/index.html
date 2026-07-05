@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HazardAI Agent</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🛡️ HazardAI Agent</div>
+        <ul>
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="documents.html">Documents</a></li>
+            <li><a href="chat.html">Chat Assistant</a></li>
+            <li><a href="incident.html">Report Incident</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+        </ul>
+        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+    </nav>
+
+    <section class="hero">
+        <h1 id="welcomeText">AI-Powered Safety Compliance for Manufacturing</h1>
+        <p id="companySubtitle">Ask safety questions, report incidents, and get instant AI-driven guidance — 
+           grounded in your company's actual safety documents.</p>
+        <a href="documents.html" class="btn">Get Started →</a>
+    </section>
+
+    <div class="container">
+        <div class="card">
+            <h2>How to Use This System</h2>
+            <p>
+                1️⃣ <strong>Upload Documents</strong> — Add your company's safety manuals so the AI can learn your rules<br>
+                2️⃣ <strong>Ask the Chat Assistant</strong> — Get instant answers grounded in your documents<br>
+                3️⃣ <strong>Report Incidents</strong> — Describe what happened (type or speak), AI classifies severity automatically<br>
+                4️⃣ <strong>Check the Dashboard</strong> — See trends and recent incidents at a glance
+            </p>
+        </div>
+        <div class="card">
+            <h2> Get Started</h2>
+            <div id="checklistContainer">
+                <p style="color:var(--text-muted); font-size:13px;">Loading your progress...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- <footer>Safety Compliance Agent — Built with Spring Bo</footer> -->
+     <footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-col">
+            <div class="footer-logo">🛡️ HazardAI</div>
+            <p class="footer-tagline">AI-powered safety compliance for modern manufacturing.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <a href="index.html">Home</a>
+            <a href="documents.html">Documents</a>
+            <a href="chat.html">Chat Assistant</a>
+            <a href="incident.html">Report Incident</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+        <div class="footer-col">
+            <h4>Built With</h4>
+            <p>Spring Boot · MySQL · Gemini AI</p>
+            <p>Vector Search · RAG Architecture</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 HazardAI. A student project for manufacturing safety compliance.</p>
+    </div>
+</footer>
+
+    <script src="js/api.js"></script>
+   <script>
+    checkLoginOrRedirect();
+    document.getElementById("welcomeText").innerText = 
+        "Welcome, " + sessionStorage.getItem("userName") + " ";
+    document.getElementById("companySubtitle").innerText = 
+        sessionStorage.getItem("companyName") + " — " + sessionStorage.getItem("userCity");
+    loadGetStartedChecklist();
+</script>
+</body>
+</html>

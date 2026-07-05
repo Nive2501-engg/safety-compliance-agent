@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Documents - HazardAI Agent</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            flex-shrink: 0;
+        }
+        .navbar ul {
+            display: flex;
+            list-style: none;
+            gap: 28px;
+            flex: 1;
+            justify-content: center;
+            margin: 0 20px;
+        }
+        .navbar a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .navbar a:hover, .navbar a.active { color: var(--cyan); }
+        .navbar .btn-secondary { flex-shrink: 0; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        th { color: var(--text-muted); font-weight: 500; }
+        .status-indexed { color: var(--success); }
+        .status-processing { color: var(--warning); }
+        .delete-btn {
+            background: rgba(239,68,68,0.15);
+            color: var(--danger);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .delete-btn:hover { background: rgba(239,68,68,0.3); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🛡️ HazardAI Agent</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="documents.html" class="active">Documents</a></li>
+            <li><a href="chat.html">Chat Assistant</a></li>
+            <li><a href="incident.html">Report Incident</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+        </ul>
+        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2> Upload Safety Document</h2>
+            <p style="color:var(--text-muted); font-size:13px; margin-bottom:12px;" id="companyLabel"></p>
+
+            <label>Document Title</label>
+            <input type="text" id="docTitle" placeholder="e.g. Machine Operation Safety Manual">
+
+            <label>Document Content</label>
+            <textarea id="docContent" rows="8" placeholder="Paste the safety document text here..."></textarea>
+
+            <button class="btn" style="margin-top:16px;" onclick="uploadDocument()">Upload & Index</button>
+        </div>
+
+        <div class="card">
+            <h2>Indexed Documents</h2>
+            <table>
+                <thead>
+                    <tr><th>Title</th><th>Status</th><th>Uploaded At</th><th>Action</th></tr>
+                </thead>
+                <tbody id="documentsTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+ </div>
+    <div class="footer-bottom">
+        <p>© 2026 HazardAI. A student project for manufacturing safety compliance.</p>
+    </div>
+</footer>
+    <script src="js/api.js"></script>
+    <script>
+        checkLoginOrRedirect();
+        document.getElementById("companyLabel").innerText = 
+            "Uploading for: " + sessionStorage.getItem("companyName");
+    </script>
+</body>
+</html>

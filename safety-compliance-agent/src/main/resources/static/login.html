@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - HazardAI Agent</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+        }
+        .login-box .logo {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .login-box .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+        .error-text {
+            color: var(--danger);
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card login-box">
+        <div class="logo">🛡️ HazardAI Agent</div>
+        <div class="subtitle">Login to access your company's safety assistant</div>
+
+        <label>Your Name</label>
+        <input type="text" id="userName" placeholder="Enter your name">
+
+        <label>Phone Number</label>
+        <input type="tel" id="userPhone" placeholder="10-digit phone number" maxlength="10" pattern="[0-9]{10}">
+
+        <label>Email</label>
+        <input type="email" id="userEmail" placeholder="Enter your email">
+
+        <label>City</label>
+        <select id="citySelect" onchange="loadCompanies()">
+            <option value="">-- Select City --</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Coimbatore">Coimbatore</option>
+            <option value="Madurai">Madurai</option>
+            <option value="Bangalore">Bangalore</option>
+        </select>
+
+        <label>Company</label>
+        <select id="companySelect">
+            <option value="">-- Select City First --</option>
+        </select>
+
+        <div class="error-text" id="loginError">Please fill in all fields.</div>
+
+        <button class="btn" style="width:100%; margin-top:20px;" onclick="login()">Login</button>
+    </div>
+
+    <script src="js/api.js"></script>
+</body>
+</html>
