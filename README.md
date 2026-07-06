@@ -70,39 +70,37 @@ Safety Compliance Agent is a full-stack, AI-powered platform that transforms man
 ```
 
 ## 🏛️ Three-Layer Intelligence Stack
-
 ┌──────────────────────────────────────────────────────────────┐
-│                📱 WORKER INPUT (Text or Voice)                │
+│                📱 WORKER INPUT (Text or Voice)               │
 │         "What should I wear near the CNC machine?"            │
-└──────────────────────────────┬─────────────────────────────────┘
+└──────────────────────────────┬────────────────────────────────┘
 │
 ╔══════════════════════▼═══════════════════════════════╗
 ║   🎙️  LAYER 1 · INPUT NORMALIZATION                   ║
 ║   Web Speech API (Tamil/English) → Text               ║
-║   ✓ Language detection  ✓ Transcript cleanup           ║
+║   ✓ Language detection  ✓ Transcript cleanup          ║
 ╚══════════════════════╤═══════════════════════════════╝
 │
 ╔══════════════════════▼═══════════════════════════════╗
-║   📚  LAYER 2 · KNOWLEDGE RETRIEVAL (RAG)              ║
+║   📚  LAYER 2 · KNOWLEDGE RETRIEVAL (RAG)            ║
 ║   Embed Query → Cosine Similarity → Company Filter    ║
-║                                                        ║
+║                                                       ║
 ║   Question Embedding ─────► gemini-embedding-001      ║
 ║   Vector Store ───────────► MySQL (JSON embeddings)   ║
 ║   Retrieval ───────────────► Top-3 relevant chunks    ║
 ╚══════════════════════╤═══════════════════════════════╝
 │
 ╔══════════════════════▼═══════════════════════════════╗
-║   ⚖️  LAYER 3 · GROUNDED GENERATION                   ║
+║   ⚖️  LAYER 3 · GROUNDED GENERATION                  ║
 ║   Gemini (gemini-flash-latest)                        ║
-║                                                        ║
+║                                                       ║
 ║   📋 Context Inputs:                                  ║
 ║   ├─ Retrieved document chunks (company-specific)     ║
 ║   ├─ Strict grounding instruction (no hallucination)  ║
 ║   └─ Fallback: "I don't have that information"        ║
-║                                                        ║
+║                                                       ║
 ║   ✅ Output: Answer + Cited Source                    ║
 ╚════════════════════════════════════════════════════════╝
-
 ## 🗂️ RAG Ingestion Pipeline
 Admin Uploads Document
 │
