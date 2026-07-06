@@ -31,7 +31,7 @@ Safety Compliance Agent is a full-stack, AI-powered platform that transforms man
 | 📝 Smart Incident Classification | LLM few-shot prompting auto-assigns severity, category & recommended action |
 | 🎙️ Bilingual Voice Input | Tamil (`ta-IN`) and English (`en-IN`) speech-to-text for hands-free reporting |
 | 🦺 Machine-Aware PPE Checklist | Dynamic safety gear checklist per selected machine before submission |
-| 📲 Real-Time Alerting | Automatic SMS (Twilio/Fast2SMS) + Email (Gmail SMTP) on high-severity incidents |
+| 📲 Real-Time Alerting |  Email (Gmail SMTP) on high-severity incidents |
 | 🏢 Multi-Tenant Isolation | Company-scoped documents, incidents & machines — zero data leakage across tenants |
 | 📊 Live Analytics Dashboard | Severity/category breakdowns + machine-wise risk ranking via Chart.js |
 | 📄 Self-Indexing Documents | Upload → auto-chunk → embed → index, ready for retrieval within seconds |
@@ -43,7 +43,7 @@ Safety Compliance Agent is a full-stack, AI-powered platform that transforms man
 | Answering safety questions | Ask a supervisor, wait | ✨ Instant, AI-grounded answers |
 | Policy source | Paper manuals / scattered PDFs | 📚 Live RAG from company documents |
 | Severity classification | Subjective, supervisor-dependent | 🧠 Consistent LLM-based classification |
-| Alerting | Manual phone calls | 📲 Automatic SMS + Email on high severity |
+| Alerting | Manual phone calls | 📲 Email on high severity |
 | Reporting method | Handwritten forms only | 🎙️ Type or speak — Tamil or English |
 | Multi-company support | Separate spreadsheets per site | 🏢 Single platform, isolated tenant data |
 | Analytics | Manual Excel counting | 📊 Real-time dashboard with risk ranking |
@@ -68,95 +68,103 @@ Safety Compliance Agent is a full-stack, AI-powered platform that transforms man
 │  + JSON embeddings)│                 │ │                  │
 └────────────────────┘  └──────────────┘  └──────────────────┘
 ```
-
 ## 🏛️ Three-Layer Intelligence Stack
+
+```
 ┌──────────────────────────────────────────────────────────────┐
-│                📱 WORKER INPUT (Text or Voice)               │
+│                📱 WORKER INPUT (Text or Voice)                │
 │         "What should I wear near the CNC machine?"            │
-└──────────────────────────────┬────────────────────────────────┘
-│
-╔══════════════════════▼═══════════════════════════════╗
-║   🎙️  LAYER 1 · INPUT NORMALIZATION                   ║
-║   Web Speech API (Tamil/English) → Text               ║
-║   ✓ Language detection  ✓ Transcript cleanup          ║
-╚══════════════════════╤═══════════════════════════════╝
-│
-╔══════════════════════▼═══════════════════════════════╗
-║   📚  LAYER 2 · KNOWLEDGE RETRIEVAL (RAG)            ║
-║   Embed Query → Cosine Similarity → Company Filter    ║
-║                                                       ║
-║   Question Embedding ─────► gemini-embedding-001      ║
-║   Vector Store ───────────► MySQL (JSON embeddings)   ║
-║   Retrieval ───────────────► Top-3 relevant chunks    ║
-╚══════════════════════╤═══════════════════════════════╝
-│
-╔══════════════════════▼═══════════════════════════════╗
-║   ⚖️  LAYER 3 · GROUNDED GENERATION                  ║
-║   Gemini (gemini-flash-latest)                        ║
-║                                                       ║
-║   📋 Context Inputs:                                  ║
-║   ├─ Retrieved document chunks (company-specific)     ║
-║   ├─ Strict grounding instruction (no hallucination)  ║
-║   └─ Fallback: "I don't have that information"        ║
-║                                                       ║
-║   ✅ Output: Answer + Cited Source                    ║
-╚════════════════════════════════════════════════════════╝
+└──────────────────────────────┬─────────────────────────────────┘
+                               │
+        ╔══════════════════════▼═══════════════════════════════╗
+        ║   🎙️  LAYER 1 · INPUT NORMALIZATION                   ║
+        ║   Web Speech API (Tamil/English) → Text               ║
+        ║   ✓ Language detection  ✓ Transcript cleanup           ║
+        ╚══════════════════════╤═══════════════════════════════╝
+                               │
+        ╔══════════════════════▼═══════════════════════════════╗
+        ║   📚  LAYER 2 · KNOWLEDGE RETRIEVAL (RAG)              ║
+        ║   Embed Query → Cosine Similarity → Company Filter    ║
+        ║                                                        ║
+        ║   Question Embedding ─────► gemini-embedding-001      ║
+        ║   Vector Store ───────────► MySQL (JSON embeddings)   ║
+        ║   Retrieval ───────────────► Top-3 relevant chunks    ║
+        ╚══════════════════════╤═══════════════════════════════╝
+                               │
+        ╔══════════════════════▼═══════════════════════════════╗
+        ║   ⚖️  LAYER 3 · GROUNDED GENERATION                   ║
+        ║   Gemini (gemini-flash-latest)                        ║
+        ║                                                        ║
+        ║   📋 Context Inputs:                                  ║
+        ║   ├─ Retrieved document chunks (company-specific)     ║
+        ║   ├─ Strict grounding instruction (no hallucination)  ║
+        ║   └─ Fallback: "I don't have that information"        ║
+        ║                                                        ║
+        ║   ✅ Output: Answer + Cited Source                    ║
+        ╚════════════════════════════════════════════════════════╝
+```
 ## 🗂️ RAG Ingestion Pipeline
-Admin Uploads Document
-│
-▼
-┌────────────────────────────────────────────┐
-│  STEP 1 · SAVE METADATA                    │
-│  Title, company, status = PROCESSING       │
-└─────────────────────┬───────────────────────┘
-│
-▼
-┌────────────────────────────────────────────┐
-│  STEP 2 · CHUNKING                         │
-│  Paragraph-based split (fallback: sentence)│
-└─────────────────────┬───────────────────────┘
-│
-▼
-┌────────────────────────────────────────────┐
-│  STEP 3 · EMBEDDING                        │
-│  gemini-embedding-001 (3072-dim vectors)   │
-└─────────────────────┬───────────────────────┘
-│
-▼
-┌────────────────────────────────────────────┐
-│  STEP 4 · STORE + INDEX                    │
-│  Chunks + embeddings → MySQL (JSON)        │
-│  status → INDEXED                          │
-└────────────────────────────────────────────┘
+
+```
+   Admin Uploads Document
+           │
+           ▼
+   ┌────────────────────────────────────────────┐
+   │  STEP 1 · SAVE METADATA                    │
+   │  Title, company, status = PROCESSING       │
+   └─────────────────────┬───────────────────────┘
+                         │
+                         ▼
+   ┌────────────────────────────────────────────┐
+   │  STEP 2 · CHUNKING                         │
+   │  Paragraph-based split (fallback: sentence)│
+   └─────────────────────┬───────────────────────┘
+                         │
+                         ▼
+   ┌────────────────────────────────────────────┐
+   │  STEP 3 · EMBEDDING                        │
+   │  gemini-embedding-001 (3072-dim vectors)   │
+   └─────────────────────┬───────────────────────┘
+                         │
+                         ▼
+   ┌────────────────────────────────────────────┐
+   │  STEP 4 · STORE + INDEX                    │
+   │  Chunks + embeddings → MySQL (JSON)        │
+   │  status → INDEXED                          │
+   └────────────────────────────────────────────┘
+```
 ## ⚖️ Incident Classification Engine
-╔══════════════════════════════════════════╗
-║   INCIDENT DESCRIPTION (Text/Voice)      ║
-╠══════════════════════════════════════════╣
-║   Few-Shot Prompt with 2 worked examples ║
-╠══════════════════════════════════════════╣
-║   Gemini (gemini-flash-latest)           ║
-╚═══════════════╤════════════════════════════╝
-▼
-┌───────────────────────────────────────────┐
-│  Structured JSON Output                   │
-│  { "severity": "high",                    │
-│    "category": "electrical",              │
-│    "recommendedAction": "..." }           │
-└───────────────────┬─────────────────────────┘
-▼
-┌─────────────┴─────────────┐
-▼                           ▼
-Save to Database         severity == "high"?
-│
-┌──────────┴
-▼ 
-Email
+
+```
+   ╔══════════════════════════════════════════╗
+   ║   INCIDENT DESCRIPTION (Text/Voice)      ║
+   ╠══════════════════════════════════════════╣
+   ║   Few-Shot Prompt with 2 worked examples ║
+   ╠══════════════════════════════════════════╣
+   ║   Gemini (gemini-flash-latest)           ║
+   ╚═══════════════╤════════════════════════════╝
+                   ▼
+   ┌───────────────────────────────────────────┐
+   │  Structured JSON Output                   │
+   │  { "severity": "high",                    │
+   │    "category": "electrical",              │
+   │    "recommendedAction": "..." }           │
+   └───────────────────┬─────────────────────────┘
+                       ▼
+         ┌─────────────┴─────────────┐
+         ▼                           ▼
+    Save to Database         severity == "high"?
+                                     │
+                          ┌──────────┴
+                          ▼                     
+                📧 Email Alert
+```
+
 | Severity | Trigger Condition | Action |
 |---|---|---|
 | 🟢 Low | Minor, no immediate risk | Logged, reviewed periodically |
 | 🟡 Medium | Moderate risk, needs attention | Logged, flagged in dashboard |
 | 🔴 High | Immediate danger to worker safety | SMS + Email sent instantly |
-
 ## 🔐 Multi-Tenant Design
 
 Every core entity — `Machine`, `SafetyDocument`, `DocumentChunk`, `Incident` — carries a `companyName` field. Every query, upload, chat request, and incident report is scoped to the logged-in user's company, ensuring:
@@ -203,7 +211,7 @@ mvn spring-boot:run
 | 4 | ✅ Done | Multi-tenant login, PPE checklist, bilingual voice input |
 | 5 | ✅ Done | Dashboard analytics, document delete, toast notifications |
 | 6 | 🔲 Planned | Full Tamil/English UI translation, role-based access control |
-| 7 | 🔲 Planned | Production deployment on AWS RDS |
+| 7 | 🔲 Planned | Production deployment on Render |
 
 ## 👩‍💻 Author
 
